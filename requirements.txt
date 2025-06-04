@@ -4,4 +4,6 @@ google-cloud-discoveryengine
 langchain-google-vertexai
 streamlit
 langchain_google_genai
-
+streamlit-lottie
+streamlit-authenticator
+streamlit-on-Hover-tabs

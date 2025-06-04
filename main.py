@@ -1,5 +1,6 @@
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.json_format import MessageToDict # To convert Struct to dict
+from streamlit_lottie import st_lottie
 
 PROJECT_ID = "solen-demo-checkride-2"
 REGION = "us-central1"
@@ -17,6 +18,7 @@ DIMENSIONS = 768
 DISPLAY_NAME = "<my_matching_engine_index_id>"
 DEPLOYED_INDEX_ID = "<my_matching_engine_endpoint_id>"
 import streamlit as st
+st.set_page_config(page_title="MOBIL의 AI상담사 모빌러 입니다", page_icon="☎️")
 
 # from langchain.llms import 
 # # from langchain.prompts import PromptTemplate
@@ -29,7 +31,7 @@ from langchain_google_genai import (
 
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     safety_settings={
         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
     },
@@ -109,6 +111,7 @@ prompt = ChatPromptTemplate.from_messages(
 
 # if "history" not in st.session_state:
 #   st.session_state.history = st.session_state.chat.history
+lottie_url = "https://lottie.host/832d3fa4-4c61-4362-9482-a065e8c06cd4/zY3vLCFT8N.json"
 
 
 
@@ -151,7 +154,7 @@ def search_sample(
     request = discoveryengine.SearchRequest(
         serving_config=serving_config,
         query=search_query,
-        page_size=5,
+        page_size=1,
         query_expansion_spec=discoveryengine.SearchRequest.QueryExpansionSpec(
             condition=discoveryengine.SearchRequest.QueryExpansionSpec.Condition.AUTO,
         ),
@@ -167,15 +170,19 @@ def search_sample(
 # End template code to use Discovery Engine API to call the Search app
 #
 
-st.set_page_config(page_title="MOBIL의 AI상담사 모빌러 입니다", page_icon="☎️")
 
-st.title("모빌, 당신의 모든 이동을 스마트하게")
+st_lottie(lottie_url, key="user")
+
+st.title("모빌, 당신의 모든 이동을 스마트하게 🚖")
+
+
 
 query = st.text_input("무엇이 궁금하신가요?", value="")
     
 if query:
-    with st.spinner("모빌러가 답변을 찾고 있습니다...䷄"):
+    with st.spinner("모빌러가 답변을 찾고 있습니다..."):
         st.write(f"'{query}'...처리중... ")
+        print(query)
         results = search_sample(project_id, location, engine_id, query)
 
     for result in results:
