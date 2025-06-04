@@ -3,9 +3,9 @@ from google.protobuf.json_format import MessageToDict # To convert Struct to dic
 from streamlit_lottie import st_lottie
 
 PROJECT_ID = "solen-demo-checkride-2"
-REGION = "us-central1"
-BUCKET = "faq_checkride_2_bucket"
-BUCKET_URI = f"gs://faq_checkride_2_bucket"
+# REGION = "us-central1"
+BUCKET = "faq_checkride_2_html"
+BUCKET_URI = f"gs://faq_checkride_2_html"
 
 project_id = "solen-demo-checkride-2"
 location = "global"
