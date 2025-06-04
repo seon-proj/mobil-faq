@@ -3,3 +3,4 @@ google-cloud-aiplatform
 google-cloud-discoveryengine
 langchain-google-vertexai
 streamlit
+langchain_google_genai
