@@ -13,10 +13,10 @@ WORKDIR /app
 COPY requirements.txt ./
 
 # Python 의존성 설치
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # 애플리케이션 코드 복사
-COPY ./ ./
+COPY . .
 
 # Streamlit이 사용하는 기본 포트 (Cloud Run은 $PORT 환경 변수를 자동으로 설정)
 ENV PORT 8080
@@ -25,4 +25,4 @@ EXPOSE 8080
 # 애플리케이션 실행 명령어
 # Cloud Run은 PORT 환경 변수에 지정된 포트에서 수신 대기해야 합니다.
 # Streamlit은 기본적으로 8501 포트를 사용하므로 --server.port $PORT로 지정합니다.
-CMD ["streamlit", "run", "main.py", "--server.port=${PORT}", "--server.address=0.0.0.0"]
+CMD ["streamlit","run", "main.py", "--server.port=${PORT}", "--server.address=0.0.0.0"]
