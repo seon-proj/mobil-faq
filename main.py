@@ -1,10 +1,6 @@
-from dotenv import load_dotenv
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.json_format import MessageToDict # To convert Struct to dict
 
-load_dotenv()
-# TODO : Set values as per your requirements
-# Project and Storage Constants
 PROJECT_ID = "solen-demo-checkride-2"
 REGION = "us-central1"
 BUCKET = "faq_checkride_2_bucket"
