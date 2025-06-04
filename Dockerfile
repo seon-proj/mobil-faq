@@ -20,7 +20,7 @@ COPY . .
 
 # Streamlit이 사용하는 기본 포트 (Cloud Run은 $PORT 환경 변수를 자동으로 설정)
 ENV PORT 8501
-EXPOSE 8
+EXPOSE 8501
 
 # 애플리케이션 실행 명령어
 # Cloud Run은 PORT 환경 변수에 지정된 포트에서 수신 대기해야 합니다.
