@@ -11,7 +11,7 @@ lottie_url = "https://lottie.host/832d3fa4-4c61-4362-9482-a065e8c06cd4/zY3vLCFT8
 st.set_page_config(page_title="MOBIL의 AI상담사 모빌러 입니다", page_icon="☎️")
 st_lottie(lottie_url, key="user")
 
-st.title("모빌, 당신의 모든 이동을 스마트하게 🚖")
+st.title("모빌, 당신의 모든 이동을 스마트하게 🚖 v2")
 query = st.text_input("무엇이 궁금하신가요?", value="")
 
 
