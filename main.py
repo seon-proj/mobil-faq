@@ -3,7 +3,7 @@ from google.protobuf.json_format import MessageToDict # To convert Struct to dic
 from streamlit_lottie import st_lottie
 
 PROJECT_ID = "solen-demo-checkride-2"
-# REGION = "us-central1"
+REGION = "us-central1"
 BUCKET = "faq_checkride_2_html"
 BUCKET_URI = f"gs://faq_checkride_2_html"
 
@@ -31,7 +31,7 @@ from langchain_google_genai import (
 
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-2.5-flash-preview-05-20",
     safety_settings={
         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
     },
@@ -182,14 +182,11 @@ query = st.text_input("무엇이 궁금하신가요?", value="")
 if query:
     with st.spinner("모빌러가 답변을 찾고 있습니다..."):
         st.write(f"'{query}'...처리중... ")
-        print(query)
         results = search_sample(project_id, location, engine_id, query)
 
     for result in results:
         # Print the full result object for debugging (optional)
         # print(result)
-        print(result)
-
         
         # Display the link (acting as the URI)
        
