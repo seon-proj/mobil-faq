@@ -25,4 +25,4 @@ EXPOSE 8501
 # 애플리케이션 실행 명령어
 # Cloud Run은 PORT 환경 변수에 지정된 포트에서 수신 대기해야 합니다.
 # Streamlit은 기본적으로 8501 포트를 사용하므로 --server.port $PORT로 지정합니다.
-CMD ["streamlit","run", "main.py"]
+CMD ["streamlit","run", "rag_main.py"]
