@@ -21,6 +21,7 @@ display_name = "faq_checkride_2_rag"
 rag_corpus_id = "4611686018427387904"
 paths = ["gs://faq_checkride_2_html/about_mobil.html", "gs://faq_checkride_2_html/기타.html", "gs://faq_checkride_2_html/법인단체,그룹.html", "gs://faq_checkride_2_html/예약,결제.html", "gs://faq_checkride_2_html/차량이용,사고.html","gs://faq_checkride_2_html/탈퇴.html","gs://faq_checkride_2_html/프로모션,쿠폰.html", "gs://faq_checkride_2_html/회원가입.html"] 
 corpus_name = "projects/{PROJECT_ID}/locations/us-central1/ragCorpora/{rag_corpus_id}"
+doc_urls = ["https://storage.cloud.google.com/faq_checkride_2_html/about_mobil.html", "https://storage.cloud.google.com/faq_checkride_2_html/차량이용,사고.html", "https://storage.cloud.google.com/faq_checkride_2_html/탈퇴.html", "https://storage.cloud.google.com/faq_checkride_2_html/프로모션,쿠폰.html", "https://storage.cloud.google.com/faq_checkride_2_html/회원가입.html", "https://storage.cloud.google.com/faq_checkride_2_html/예약,결제.html","https://storage.cloud.google.com/faq_checkride_2_html/법인단체,그룹.html","https://storage.cloud.google.com/faq_checkride_2_html/기타.html"]
 
 vertexai.init(project=PROJECT_ID, location="us-central1")
 
@@ -39,7 +40,7 @@ rag_corpus = rag.create_corpus(
 # Import Files to the RagCorpus
 rag.import_files(
     rag_corpus.name,
-    paths=paths,
+    paths=doc_urls,
     # Optional
     transformation_config=rag.TransformationConfig(
         chunking_config=rag.ChunkingConfig(
