@@ -19,7 +19,7 @@ query = st.text_input("무엇이 궁금하신가요?", value="")
 PROJECT_ID = "solen-demo-checkride-2"
 display_name = "faq_checkride_2_rag"
 rag_corpus_id = "4611686018427387904"
-paths = ["gs://faq_checkride_2_html/about_mobil.html", "gs://faq_checkride_2_html/etc.html", "gs://faq_checkride_2_html/법인단체,그룹.html", "gs://faq_checkride_2_html/예약,결제.html", "gs://faq_checkride_2_html/차량이용,사고.html","gs://faq_checkride_2_html/탈퇴.html","gs://faq_checkride_2_html/프로모션,쿠폰.html", "gs://faq_checkride_2_html/회원가입.html"] 
+paths = ["gs://faq_checkride_2_html/about_mobil.html", "gs://faq_checkride_2_html/etc.html", "gs://faq_checkride_2_html/organization.html", "gs://faq_checkride_2_html/reservation.html", "gs://faq_checkride_2_html/howtouse.html","gs://faq_checkride_2_html/signout.html","gs://faq_checkride_2_html/promotioncoupon.html", "gs://faq_checkride_2_html/signin.html"] 
 corpus_name = "projects/{PROJECT_ID}/locations/us-central1/ragCorpora/{rag_corpus_id}"
 
 vertexai.init(project=PROJECT_ID, location="us-central1")
