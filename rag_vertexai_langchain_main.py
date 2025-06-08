@@ -35,7 +35,6 @@ with st.sidebar:
     email = st.text_input("email", key="email", type="default")
     password = st.text_input("password", key="password", type="password")
     "[Mobil 렌트 이용하러 가기](https://platform.openai.com/account/api-keys)"
-    "[---](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
 st.title("모빌, 당신의 모든 이동을 스마트하게 🚗")
 st.caption("😀 안녕하세요 모빌의 AI 상담사 모빌러입니다")
 

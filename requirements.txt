@@ -2,7 +2,7 @@ langchain
 google-cloud-aiplatform>=1.56.0
 google-cloud-discoveryengine
 langchain-google-vertexai
-lagnchain-community
+langchain-community
 faiss-cpu
 nbformat
 streamlit
