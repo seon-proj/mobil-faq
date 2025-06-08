@@ -31,8 +31,8 @@ lottie_url = "https://lottie.host/832d3fa4-4c61-4362-9482-a065e8c06cd4/zY3vLCFT8
 st.set_page_config(page_title="MOBIL의 AI상담사 모빌러 입니다", page_icon="☎️")
 st_lottie(lottie_url, key="user")
 
+
 with st.sidebar:
-    email = st.text_input("email", key="email", type="default")
     password = st.text_input("password", key="password", type="password")
     "[Mobil 렌트 이용하러 가기](https://platform.openai.com/account/api-keys)"
 st.title("모빌, 당신의 모든 이동을 스마트하게 🚗")
@@ -76,15 +76,16 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
     
+
 # print(chain.invoke(question))
 # st.write(chain.invoke(question))
 
 if question:
-    st.session_state.messages.append({"role": "user", "content": question})
-    st.chat_message("user").write(question)
     with st.spinner("모빌러가 답변을 찾고 있습니다..."):
+        st.session_state.messages.append({"role": "user", "content": question})
+        st.chat_message("user").write(question)        
         st.write(f"'{question}'...처리중... ")
         response = chain.invoke(question)
-    # st.write(response)
+# st.write(response)
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.chat_message("assistant").write(response)
