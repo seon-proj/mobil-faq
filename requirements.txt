@@ -2,6 +2,9 @@ langchain
 google-cloud-aiplatform>=1.56.0
 google-cloud-discoveryengine
 langchain-google-vertexai
+lagnchain-community
+faiss-cpu
+nbformat
 streamlit
 langchain_google_genai
 streamlit-lottie
@@ -9,3 +12,5 @@ streamlit-authenticator
 streamlit-on-Hover-tabs
 google-genai
 vertexai
+unstructured
+langchain_google_community
