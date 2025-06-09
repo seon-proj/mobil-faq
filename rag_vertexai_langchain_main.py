@@ -44,8 +44,8 @@ question = st.chat_input()
 
 PROJECT_ID = "solen-demo-checkride-2"  # @param {type:"string"}
 LOCATION_ID = "global"  # @param {type:"string"}
-SEARCH_ENGINE_ID = "faq-checkride-2-app_1748845269358"
-DATA_STORE_ID = "faq-checkride-2-data-store_1748841765883"
+# SEARCH_ENGINE_ID = "faq-checkride-2-app_1748845269358"
+DATA_STORE_ID = "faq-v2-data-store_1749427552524"
 paths = ["gs://faq_checkride_2_html/about_mobil.html", "gs://faq_checkride_2_html/etc.html", "gs://faq_checkride_2_html/organization.html", "gs://faq_checkride_2_html/reservation.html", "gs://faq_checkride_2_html/howtouse.html","gs://faq_checkride_2_html/signout.html","gs://faq_checkride_2_html/promotioncoupon.html", "gs://faq_checkride_2_html/signin.html"] 
 
 
@@ -89,3 +89,4 @@ if question:
 # st.write(response)
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.chat_message("assistant").write(response)
+        
