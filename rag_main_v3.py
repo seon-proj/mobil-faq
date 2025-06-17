@@ -9,15 +9,9 @@ project_id = "solen-demo-checkride-2"
 location = "global"                    # Values: "global", "us", "eu"
 preamble = dict()
 
-#----
-#engine_id = "another-msa-faq-search-app_1726823313024"
-#preamble["energetic"] = "너는 무신사의 친절한 고객센터 상담원이야. 주어진 데이터만을 가지고 정확하고 애교넘치게 해요체로 답변해줘."
-#preamble["calm"] = "너는 무신사의 전문적인 고객센터 상담원이야. 주어진 데이터만을 가지고 정확하고 차분하며 간결하게 합니다체로 답변해줘."
-
-#----
-engine_id = "faq-checkride-v2-app_1749427823307"
-preamble["energetic"] = "너는 모빌(카쉐어링 서비스)의 고객상담을 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 정확하고 에너지와 애교넘치게 해요체로 답변해줘."
-preamble["calm"] = "너는 모빌(카쉐어링 서비스)의 고객상담을 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 정확하고 차분하며 간결하게 합니다체로 답변해줘."
+engine_id = "checkride2-demo-checkup_1750122112747"
+preamble["energetic"] = "너는 모빌(카쉐어링 서비스)의 차량 점검 안내를 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 순서대로 정확하고 에너지와 애교넘치게 해요체로 답변해줘."
+preamble["calm"] = "너는 모빌(카쉐어링 서비스)의 차량 점검 안내를 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 순서대로 정확하고 차분하며 간결하게 합니다체로 답변해줘."
 
 
 def search_sample(
@@ -102,10 +96,10 @@ st.set_page_config(page_title='모빌 - Google Cloud Generative AI demo',
 with st.sidebar:
     #st.sidebar.image("https://corp.musinsa.com/images/OG.png", width=150)
     st.sidebar.image("./logo2.png", width=128)
-    st.title('Ask anything')
+    st.title('Car check-up')
     st.write('Powered by Google Vertex AI Agent Builder')
 
-st.header("Mobil 상담 센터 입니다.", divider="blue")
+st.header("Mobil 차량점검 안내 입니다.", divider="blue")
 
 display_summary = True
 # st.sidebar.header("Generative Summary")
@@ -122,7 +116,7 @@ preamble_selected = preamble[preamble_option]
 
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "차량 점검을 시작하고 싶으신가요?"}]
 
 # Display or clear chat messages
 for message in st.session_state.messages:
@@ -130,16 +124,15 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "차량 점검을 시작하고 싶으신가요?"}]
 
 st.sidebar.button('Clear Search Results', on_click=clear_chat_history)
-st.sidebar.caption("Build : 20250109_1630")
 
 def generate_output(response, display_summary):
     import re
     ans = ""
     #default_link = "https://www.musinsa.com/app/cs/faq/004"
-    default_link = "https://ohou.se/customer_center"
+    default_link = "https://www.socar.kr/cs"
     summary = response.summary.summary_with_metadata.summary.replace("[","**").replace("]","**")
     if not display_summary:
         summary = ""
@@ -157,7 +150,7 @@ def generate_output(response, display_summary):
                 ans = ans + f'\n > - [{doc_data["question"]}]({doc_data["source_url"]})'
 
     if (ans != "") and (display_summary):
-        ans = "\n\n > 참고 FAQ 자료 목록 : " + ans
+        ans = "\n\n > 참고 차량점검 순서 자료 목록 : " + ans
     
     return  re.sub(r"\[.*?\]", "", summary) + ans
 
@@ -222,3 +215,5 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 
     message = {"role": "assistant", "content": output}
     st.session_state.messages.append(message)
+    st.link_button("국토교통부를 통해 전달드리는 차량 점검 리스트", "www.korea.kr", icon="🔗")
+    
