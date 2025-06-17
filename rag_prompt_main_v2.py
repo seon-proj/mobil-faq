@@ -5,6 +5,47 @@ from vertexai.generative_models import GenerativeModel, Tool
 import streamlit as st
 from streamlit_lottie import st_lottie
 from typing import Union, ClassVar
+import typing
+# imagen code
+import IPython
+import IPython.display
+from PIL import Image as PIL_Image
+from PIL import ImageOps as PIL_ImageOps
+
+# TODO(developer): Update and un-comment below lines
+PROJECT_ID = "solen-demo-checkride-2"
+LOCATION = "us-central1"
+ENGINE_ID = "faq-checkride-v2-app_1749427823307"
+vertex_ai_search_engine_name = "projects/{PROJECT_ID}/locations/{LOCATION}/collections/default_collection/engines/{ENGINE_ID}"
+display_name = "test_corpus"
+description = "Corpus Description"
+cloud_storage_id = "faq_checkride_2_html"
+
+
+def display_image(
+    image,
+    max_width: int = 600,
+    max_height: int = 350,
+) -> None:
+    pil_image = typing.cast(PIL_Image.Image, image._pil_image)
+    if pil_image.mode != "RGB":
+        # RGB is supported by all Jupyter environments (e.g. RGBA is not yet)
+        pil_image = pil_image.convert("RGB")
+    image_width, image_height = pil_image.size
+    if max_width < image_width or max_height < image_height:
+        # Resize to display a smaller notebook image
+        pil_image = PIL_ImageOps.contain(pil_image, (max_width, max_height))
+    # IPython.display.display(pil_image)
+    st.image(pil_image)
+
+
+from vertexai.preview.vision_models import ImageGenerationModel
+
+vertexai.init(project="solen-demo-checkride-2", location="us-central1")
+
+generation_model = ImageGenerationModel.from_pretrained("imagen-4.0-generate-preview-05-20")
+
+
 
 lottie_url = "https://lottie.host/832d3fa4-4c61-4362-9482-a065e8c06cd4/zY3vLCFT8N.json"
 
@@ -21,13 +62,8 @@ st.caption("😀 안녕하세요 모빌의 AI 상담사 모빌러입니다")
 
 # question = st.text_input("무엇이 궁금하신가요?", value="")   
 question = st.chat_input()
-# TODO(developer): Update and un-comment below lines
-PROJECT_ID = "solen-demo-checkride-2"
-LOCATION = "us-central1"
-ENGINE_ID = "faq-checkride-v2-app_1749427823307"
-vertex_ai_search_engine_name = "projects/{PROJECT_ID}/locations/{LOCATION}/collections/default_collection/engines/{ENGINE_ID}"
-display_name = "test_corpus"
-description = "Corpus Description"
+
+
 
 
 # Initialize Vertex AI API once per session
@@ -107,14 +143,25 @@ if question:
         st.session_state.messages.append({"role": "user", "content": question})
         st.chat_message("user").write(question)        
         st.write(f"'{question}'...처리중... ")
+        images = generation_model.generate_images(
+            prompt=question,
+            number_of_images=4,
+            aspect_ratio="1:1",
+            negative_prompt="",
+            person_generation="",
+            safety_filter_level="",
+            add_watermark=True,
+        )
+        display_image(images[0])
+
+       
         response = rag_model.generate_content(question)
-        print(response.text)
         st.session_state.messages.append({"role": "assistant", "content": response})   
         
         chunk = response.candidates[0].grounding_metadata.grounding_chunks[0]
         link = chunk.retrieved_context.uri
 
-        st.chat_message("assistant").write(response.text+" "+link)
+        st.chat_message("assistant").write(response.text)
         st.subheader("아래 버튼을 통해 상세 정보를 보실 수 있습니다 🙏")
         st.link_button("Go to FAQ Page", "https://www.socar.kr/cs", icon="🔗")
     

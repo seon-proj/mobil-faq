@@ -5,6 +5,7 @@ from langchain_google_vertexai import ChatVertexAI
 from langchain_google_community import (
     VertexAISearchRetriever
 )
+
 prompt = ChatPromptTemplate.from_template(
     """
     You are a proficient customer assistance of "Mobil" which is car sharing service compnay. Respond with the syntactically correct answer for to the question below. Make sure you follow these rules:
