@@ -202,6 +202,7 @@ def button_click(ph):
 # User-provided prompt
 if prompt := st.chat_input("궁금하신 점을 입력해주세요."):
     # Add user message to chat history
+    score=0.0
     st.session_state.messages.append({"role": "user", "content": prompt, "link": None})
     # Display user message in chat message container
     with st.chat_message("user"):
@@ -217,11 +218,12 @@ if prompt := st.chat_input("궁금하신 점을 입력해주세요."):
             if response.results: # Check if there are any results
                 # Get the link from the first (most relevant) result
                 link = response.results[0].document.derived_struct_data.get("link")
+                score = response.results[0].model_scores.get("relevance_score").values
 
             st.markdown(output)
             if link:
-                print(link)
                 link=link.replace("gs://"," ")
                 st.markdown(f"참조 문서 :{link}", unsafe_allow_html=True)
+                st.markdown(f"관련도 점수 : {score}", unsafe_allow_html=True)
     # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": output, "link": link})
+    st.session_state.messages.append({"role": "assistant", "content": output, "link": link, "score" : score})
