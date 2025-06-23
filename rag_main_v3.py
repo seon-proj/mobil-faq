@@ -9,12 +9,6 @@ project_id = "solen-demo-checkride-2"
 location = "global"                    # Values: "global", "us", "eu"
 preamble = dict()
 
-#----
-#engine_id = "another-msa-faq-search-app_1726823313024"
-#preamble["energetic"] = "너는 무신사의 친절한 고객센터 상담원이야. 주어진 데이터만을 가지고 정확하고 애교넘치게 해요체로 답변해줘."
-#preamble["calm"] = "너는 무신사의 전문적인 고객센터 상담원이야. 주어진 데이터만을 가지고 정확하고 차분하며 간결하게 합니다체로 답변해줘."
-
-#----
 engine_id = "faq-checkride-v2-app_1749427823307"
 preamble["energetic"] = "너는 모빌(카쉐어링 서비스)의 고객상담을 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 정확하고 에너지와 애교넘치게 해요체로 답변해줘."
 preamble["calm"] = "너는 모빌(카쉐어링 서비스)의 고객상담을 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 정확하고 차분하며 간결하게 합니다체로 답변해줘."
@@ -122,15 +116,17 @@ preamble_selected = preamble[preamble_option]
 
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?", "link" : None}]
 
 # Display or clear chat messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.write(message["content"])
+        st.markdown(message["content"])
+        if message.get("link"): # Safely get link and display
+            st.markdown(f"[자세한 정보 보기]({message['link']})", unsafe_allow_html=True)
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?", "link": None}]
 
 st.sidebar.button('Clear Search Results', on_click=clear_chat_history)
 st.sidebar.caption("Build : 20250109_1630")
@@ -138,9 +134,9 @@ st.sidebar.caption("Build : 20250109_1630")
 def generate_output(response, display_summary):
     import re
     ans = ""
-    #default_link = "https://www.musinsa.com/app/cs/faq/004"
-    default_link = "https://ohou.se/customer_center"
-    summary = response.summary.summary_with_metadata.summary.replace("[","**").replace("]","**")
+    summary = ""
+    if response.summary and response.summary.summary_with_metadata:
+        summary = response.summary.summary_with_metadata.summary.replace("[","**").replace("]","**")
     if not display_summary:
         summary = ""
 
@@ -148,13 +144,18 @@ def generate_output(response, display_summary):
     #for ref in (response.summary.summary_with_metadata.references):
     #    ans = ans + f"\n > - [{ref.title}]({default_link})"
 
-    # 오늘의집
-    # reference : https://cloud.google.com/python/docs/reference/discoveryengine/latest/google.cloud.discoveryengine_v1.types.SearchResponse
-    for ref in (response.summary.summary_with_metadata.references):
-        for doc in (response.results):
-            if (ref.document == doc.document.name):
-                doc_data = dict(doc.document.struct_data)
-                ans = ans + f'\n > - [{doc_data["question"]}]({doc_data["source_url"]})'
+    # Create a list of references from the summary
+    if response.summary and response.summary.summary_with_metadata:
+        references = []
+        for ref in response.summary.summary_with_metadata.references:
+            for doc in response.results:
+                if ref.document == doc.document.name:
+                    doc_data = doc.document.derived_struct_data
+                    title = doc_data.get("title", "Source")
+                    link = doc_data.get("link", "#")
+                    references.append(f'\n > - [{title}]({link})')
+                    break  # Move to next reference once found
+        ans = "".join(sorted(list(set(references))))
 
     if (ans != "") and (display_summary):
         ans = "\n\n > 참고 FAQ 자료 목록 : " + ans
@@ -199,26 +200,28 @@ def button_click(ph):
             st.markdown(translated_output, unsafe_allow_html=True)
 
 # User-provided prompt
-if prompt := st.chat_input():
-    st.session_state.messages.append({"role": "user", "content": prompt})
+if prompt := st.chat_input("궁금하신 점을 입력해주세요."):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt, "link": None})
+    # Display user message in chat message container
     with st.chat_message("user"):
-        st.write(prompt)
+        st.markdown(prompt)
 
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    msg = st.chat_message("assistant")
-    with msg:
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
         with st.spinner("Searching..."):
             response = search_sample(project_id, location, engine_id, prompt, preamble_selected)
-            #response = answer_query_sample(project_id, location, engine_id, prompt)
             output = generate_output(response, display_summary)
-            placeholder = st.empty()
-            placeholder.markdown(output, unsafe_allow_html=True)
-        #with st.spinner("Translating..."):
-        #    translated_output = get_translation(output)
-        #    st.markdown(translated_output, unsafe_allow_html=True)
-
             
-                
-    message = {"role": "assistant", "content": output}
-    st.session_state.messages.append(message)
+            link = None
+            if response.results: # Check if there are any results
+                # Get the link from the first (most relevant) result
+                link = response.results[0].document.derived_struct_data.get("link")
+
+            st.markdown(output)
+            if link:
+                print(link)
+                link=link.replace("gs://"," ")
+                st.markdown(f"참조 문서 :{link}", unsafe_allow_html=True)
+    # Add assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": output, "link": link})
