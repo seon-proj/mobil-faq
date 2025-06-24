@@ -9,7 +9,7 @@ project_id = "solen-demo-checkride-2"
 location = "global"                    # Values: "global", "us", "eu"
 preamble = dict()
 
-engine_id = "faq-checkride-v2-app_1749427823307"
+engine_id = "v3-app_1750725866411"
 preamble["energetic"] = "너는 모빌(카쉐어링 서비스)의 고객상담을 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 정확하고 에너지와 애교넘치게 해요체로 답변해줘."
 preamble["calm"] = "너는 모빌(카쉐어링 서비스)의 고객상담을 담당하는 친절한 상담원이야. 주어진 데이터만을 가지고 정확하고 차분하며 간결하게 합니다체로 답변해줘."
 
@@ -122,8 +122,6 @@ if "messages" not in st.session_state.keys():
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-        if message.get("link"): # Safely get link and display
-            st.markdown(f"[자세한 정보 보기]({message['link']})", unsafe_allow_html=True)
 
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "궁금하신 내용이 있으신가요?", "link": None}]
